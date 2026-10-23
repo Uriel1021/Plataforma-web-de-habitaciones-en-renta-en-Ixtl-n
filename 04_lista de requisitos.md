@@ -1,7 +1,7 @@
 # Lista de requisitos de software
 
 **Proyecto:** Plataforma web de habitaciones en renta en Ixtlán, Oaxaca  
-**Versión del catálogo:** 1.0 — borrador consolidado  
+**Versión del catálogo:** 1.0 
 **Fecha:** 23 de octubre de 2026  
 **Alcance geográfico:** localidad de Ixtlán, Oaxaca  
 **Estado:** especificados; no equivale a implementación verificada
