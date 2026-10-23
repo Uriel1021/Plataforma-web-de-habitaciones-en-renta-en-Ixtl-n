@@ -1,0 +1,14 @@
+{
+  "name": "ixtlan-habitaciones-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototipo frontend modular HTML + Tailwind CSS + JavaScript, orientado a MVC",
+  "scripts": {
+    "dev": "node tools/dev-server.js",
+    "start": "node tools/dev-server.js",
+    "test": "node --test tests/*.test.js",
+    "build:css": "node tools/build-css.js"
+  },
+  "devDependencies": {"tailwindcss": "^4.1.10"}
+}

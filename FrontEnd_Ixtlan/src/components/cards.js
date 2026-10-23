@@ -1,0 +1,7 @@
+import {esc,icon,money} from '../core/helpers.js';
+import {ratingOf} from '../domain/filters.js';
+import {getDB} from '../core/store.js';
+export function roomCard(room){const rating=ratingOf(room,getDB().reviews);const photo=room.images?.[0]||'sage';return `<article class="property-card" aria-label="${esc(room.title)}">
+  <a class="property-art art-${esc(photo)}" href="#habitacion/${esc(room.id)}" aria-label="Ver detalles de ${esc(room.title)}"><img src="./assets/images/room-${esc(photo)}.svg" alt="Ilustración de interior, no fotografía real" loading="lazy" width="600" height="410"/><span class="room-status ${room.availability==='Rentada'?'rented':''}">${esc(room.availability)}</span></a>
+  <div class="property-content"><div class="property-zone">${icon('pin',15)} ${esc(room.zone)}</div><h3><a href="#habitacion/${esc(room.id)}">${esc(room.title)}</a></h3><div class="property-meta"><span>${icon('bed',16)} ${esc(room.furnishing)}</span><span>${icon('people',16)} ${room.capacity} pers.</span></div><div class="property-divider"></div><div class="property-bottom"><div><strong>${money(room.price)}</strong><small>/mes</small></div><span class="rating-pill">${icon('star',15)} ${rating===null?'Sin calif.':rating.toFixed(1)}</span></div></div></article>`;}
+export function emptyState(title,text,action=''){return `<div class="empty-state">${icon('search',36)}<h3 class="serif text-2xl">${esc(title)}</h3><p>${esc(text)}</p>${action}</div>`;}

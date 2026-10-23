@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {filterRooms,sortRooms,priceError,normalizeZone,ratingOf} from '../src/domain/filters.js';
+import {haversineKm,polygonCovers} from '../src/domain/geo.js';
+import {makeSeed} from '../src/data/seed.js';
+const seed=makeSeed();const rooms=seed.rooms;
+test('filtro de precio incluye límites',()=>{assert.equal(filterRooms(rooms,{min:'2300',max:'2300'}).length,1);});
+test('rango invertido provoca error sin borrar estado',()=>assert.ok(priceError({min:'3000',max:'1000'})));
+test('normalización no equipara Centro y Zona Centro',()=>{assert.equal(normalizeZone(' cénTro '),normalizeZone('CENTRO'));assert.notEqual(normalizeZone('Centro'),normalizeZone('Zona Centro'));});
+test('OR dentro de zonas',()=>{assert.equal(filterRooms(rooms,{zones:['Centro','Zona Centro']}).length,4);});
+test('OR dentro de servicios',()=>{assert.ok(filterRooms(rooms,{services:['Agua','Internet / Wi-Fi']}).length>0);});
+test('AND entre familias',()=>{const r=filterRooms(rooms,{zones:['Centro'],min:2000,availability:'Disponible'});assert.equal(r.length,1);assert.equal(r[0].id,'hab-1');});
+test('sin servicios incluidos es independiente',()=>{assert.equal(filterRooms(rooms,{servicesNone:true}).length,1);});
+test('orden por precio usa renta base',()=>{const r=sortRooms(rooms,'priceAsc',seed.reviews);assert.equal(r[0].price,1300);});
+test('sin calificaciones queda último',()=>{const rs=sortRooms(rooms,'rating',seed.reviews);assert.equal(rs[0].id,'hab-3');});
+test('distancia cero exacta',()=>{assert.equal(haversineKm(rooms[0].geo,rooms[0].geo),0);assert.ok(haversineKm(rooms[0].geo,rooms[1].geo)>0);});
+test('punto sobre borde es interior, fuera no',()=>{const sq=[{lat:0,lng:0},{lat:0,lng:2},{lat:2,lng:2},{lat:2,lng:0}];assert.equal(polygonCovers({lat:0,lng:1},sq),true);assert.equal(polygonCovers({lat:2,lng:2},sq),true);assert.equal(polygonCovers({lat:2,lng:2.0001},sq),false);});

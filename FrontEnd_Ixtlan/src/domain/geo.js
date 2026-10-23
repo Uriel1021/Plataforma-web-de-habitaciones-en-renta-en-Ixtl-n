@@ -1,0 +1,7 @@
+const EPS=1e-10;
+function onSegment(p,a,b){const cross=(p.lng-a.lng)*(b.lat-a.lat)-(p.lat-a.lat)*(b.lng-a.lng);if(Math.abs(cross)>EPS)return false;return p.lng>=Math.min(a.lng,b.lng)-EPS&&p.lng<=Math.max(a.lng,b.lng)+EPS&&p.lat>=Math.min(a.lat,b.lat)-EPS&&p.lat<=Math.max(a.lat,b.lat)+EPS;}
+/** Inclusive point-in-polygon: points on boundary or vertices count as inside (D-132). */
+export function polygonCovers(point,polygon){if(!point||!Array.isArray(polygon)||polygon.length<3)return false;let inside=false;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const a=polygon[j],b=polygon[i];if(onSegment(point,a,b))return true;const intersects=((a.lat>point.lat)!==(b.lat>point.lat))&&(point.lng<(b.lng-a.lng)*(point.lat-a.lat)/(b.lat-a.lat)+a.lng);if(intersects)inside=!inside;}return inside;}
+export function haversineKm(a,b){if(!a||!b)return Infinity;const r=6371.0088,toRad=Math.PI/180;const dLat=(b.lat-a.lat)*toRad,dLon=(b.lng-a.lng)*toRad;const h=Math.sin(dLat/2)**2+Math.cos(a.lat*toRad)*Math.cos(b.lat*toRad)*Math.sin(dLon/2)**2;return 2*r*Math.asin(Math.min(1,Math.sqrt(h)));}
+export function project(point,bounds={minLat:17.316,maxLat:17.349,minLng:-96.508,maxLng:-96.470}){return{x:(point.lng-bounds.minLng)/(bounds.maxLng-bounds.minLng)*100,y:(bounds.maxLat-point.lat)/(bounds.maxLat-bounds.minLat)*100};}
+export function polygonToSvg(polygon){return polygon.map(p=>{const {x,y}=project(p);return `${x.toFixed(2)},${y.toFixed(2)}`}).join(' ');}
