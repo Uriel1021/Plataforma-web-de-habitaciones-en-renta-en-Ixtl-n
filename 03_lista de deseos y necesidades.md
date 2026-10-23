@@ -1,7 +1,7 @@
 # Lista de deseos y necesidades
 
 **Proyecto:** Plataforma web de habitaciones en renta en Ixtlán, Oaxaca  
-**Versión:** 1.0 — borrador consolidado  
+**Versión:** 1.0
 **Fecha:** 23 de octubre de 2026
 
 **Autor:** Uriel Aguilar Mauricio
